@@ -2,29 +2,21 @@
 
 > 一个看小说的基于NODE JS VUE写的项目
 
-## Build Setup
+## 开发进度
 
 ``` bash
-# install dependencies
-npm install
+1.首页列表显示（已完成）
 
-# serve with hot reload at localhost:8080
-npm run dev
+2.书籍详情（进行中）
 
-# build for production with minification
-npm run build
+3.书籍推荐（未完成）
 
-# build for production and view the bundle analyzer report
-npm run build --report
+4.登录（进行中）
 
-# run unit tests
-npm run unit
+5.个人中心（未完成）
 
-# run e2e tests
-npm run e2e
+6.阅读设置（未完成）
 
-# run all tests
-npm test
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+> 采得百花成蜜后，为谁辛苦为谁甜
