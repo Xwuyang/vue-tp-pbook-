@@ -6,6 +6,7 @@ import userinfo from '@/components/userinfo'
 import bookinfo from '@/components/bookinfo'
 import login from '@/components/login'
 import search from '@/components/search'
+import reg from '@/components/reg'
 
 Vue.use(Router)
 
@@ -45,6 +46,11 @@ export default new Router({
       path: '/search',
       name: 'search',
       component: search
+    },
+    {
+      path: '/reg',
+      name: 'reg',
+      component: reg
     }
   ]
 })

@@ -1,6 +1,6 @@
 <template>
   <div>
-　　<router-view></router-view>
+    　　<router-view></router-view>
     <div class="row footer">
       <div class="tab-item" v-for="item in links">
         <a @click="$goRoute(item.route)" class="col">
@@ -40,9 +40,6 @@
     components: {}
   }
 </script>
-<style lang="less">
-  @import '~vux/src/styles/reset.less';
-</style>
 <style>
   html{
     background: #f3f3f7;

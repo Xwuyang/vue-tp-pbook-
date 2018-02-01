@@ -1,5 +1,5 @@
 <template>
-  <transition name="fade">
+  <!-- <transition name="fade"> -->
   <div>
     <div class="header">
       <span>PBOOKS</span>
@@ -13,32 +13,35 @@
           <router-link :to="{path:'./bookinfo',query:{bid:li.bid}}">
           <img v-bind:src="li.img">
           <div class="pbintro">
-            <span class="pbtitle">{{li.title}}</span>
-            <span class="pbgx">{{li.update}}</span>
+            <span class="pbtitle">{{li.name}}</span>
+            <span class="pbgx">{{li.ntime}}</span>
             <div class="red-point" v-if="li.isup == 1"></div>
           </div>
           </router-link>
         </div>
       </pull-to>
     </div>
+    <vue-loading v-show="isShowLoading" type="beat" color="#d9544e" style="position: fixed;top: 50%;left: 50%; transform: translate3d(-50%,-50%,0)" :size="{ width: '50px', height: '50px' }"></vue-loading>
   </div>
-  </transition>
+  <!-- </transition> -->
 </template>
 <script type="text/ecmascript-6">
   import PullTo from 'vue-pull-to'
+  import vueLoading from 'vue-loading-template'
   export default {
     name: 'App',
     data () {
       return {
         show: true,
-        blist : []
+        blist : [],
+        isShowLoading:false
       }
     },
     created () {
       //var userinfo = this.ajax('getUserInfo');
-      this.$http.post('apis/api/pbook/getUserInfo').then(function(res){
+      this.$http.post(this.url+'index.php/api/pbook/getUserInfo').then(function(res){
         var userinfo=res.body;
-        if(!userinfo){
+        if(userinfo == 0){
           this.$router.push('login');
         }else{
           this.getlist();
@@ -48,7 +51,8 @@
       });
     },
     components: {
-      PullTo
+      PullTo,
+      vueLoading
     },
     methods: {
       refresh(loaded) {
@@ -58,8 +62,10 @@
         }, 1000);
       },
       getlist(){
-        this.$http.post('apis/api/pbook/getBookList').then(function(res){
-          var json=res.body;
+        this.isShowLoading = true;
+        this.$http.post(this.url+'index.php/api/pbook/getBookList').then(function(res){
+          this.isShowLoading = false;
+          var json=res.body.data;
           this.blist = json;
         },function(res){
           alert(res.status)

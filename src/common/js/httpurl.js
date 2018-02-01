@@ -1,0 +1,2 @@
+const url = '/';
+export  {url};

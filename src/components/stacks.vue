@@ -5,7 +5,6 @@ asdad
 </template>
 
 <script>
-
 </script>
 
 <style>

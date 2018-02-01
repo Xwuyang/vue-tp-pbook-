@@ -12,45 +12,55 @@
         <i class="icon iconfont icon-mima1"></i>
         <input class="f-input" v-model="pass" type="password" placeholder="请输入您的密码"/>
       </div>
+      <div class="f-div">
+        <i class="icon iconfont icon-mima1"></i>
+        <input class="f-input" v-model="passtwo" type="password" placeholder="请再输入您的密码"/>
+      </div>
       <!--<div class="f-div">
         <i class="icon iconfont icon-sousuo"></i>
         <input style="height: 1.5rem;"  type="text" placeholder="请输入您的验证码"/>
         <button class="g-code">获取验证码</button>
       </div>-->
       <div class="f-login">
-        <button class="login" @click="doLogin()">登录</button>
+        <button class="login" @click="doReg()">注册</button>
         <span class="login-s pleft" @click="doPass()">忘记密码</span>
-        <span class="login-s prignt" @click="doReg()">注册</span>
+        <span class="login-s prignt" @click="doLogin()">登录</span>
       </div>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+import Vue from 'vue';  
   export default {
     name: 'App',
     data () {
       return {
         mobile: '',
-        pass: ''
+        pass: '',
+        passtwo: ''
       }
     },
     created () {
     },
     methods: {
-      doLogin () {
+      doReg (){
         if(!this.mobile){
-          alert('手机号不能为空');
+          this.$toast('手机号不能为空');
           return false;
         }
         if(!this.pass){
-          alert('密码不能为空');
+          this.$toast('密码不能为空');
+          return false;
+        }
+        if(this.pass != this.passtwo){
+          this.$toast('两次密码不一致');
           return false;
         }
         var parmes = {};
         parmes['mobile'] = this.mobile;
         parmes['pass'] = this.pass;
-        this.$http.post(this.url+'index.php/api/pbook/doLogin',parmes).then(function(res){
+        this.$http.post(this.url+'index.php/api/pbook/doRegister',parmes).then(function(res){
           var json=res.body;
           if(json.code == 200){
             this.$router.push('shelf');
@@ -60,10 +70,9 @@
         },function(res){
           alert(res.status)
         });
-        //var sta = this.ajax('doLogin','POST',parmes);console.log(2);
       },
-      doReg (){
-        this.$router.push('reg');
+      doLogin (){
+        this.$router.push('login');
       },
       doPass (){
         this.$toast('待开发');
