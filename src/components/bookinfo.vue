@@ -1,5 +1,43 @@
 <template>
   <div class="hx books" v-bind:style="bgstyle">
+      <section v-show="ischapt" class="rp_sidebar" id="rp_sidebar" v-bind:style="chaptstyle">
+        <div class="rp_ml">
+            <div class="rp_bookname" v-html="taptitle">
+                
+            </div>
+            <div class="rp_bookML">
+                目录
+            </div>
+            <input type="hidden" value="2" id="chapterSort">
+            <input type="hidden" value="460085328" id="chapterid">
+            <input type="hidden" value="460085325" id="bookid">
+            <input type="hidden" value="1.1" id="dqpage">
+            <input type="hidden" value="3" id="page">
+            <input type="hidden" value="1.1" id="slpage">
+            <input type="hidden" value="50" id="sunpage">
+            <div class="swiper-container">
+                <div v-for="li in chaptlist" class="swiper-wrapper" style="padding-top: 0px; padding-bottom: 0px; transform: translate3d(0px, -51px, 0px); transition-duration: 0s; width: 326px; height: 4081px;">
+                    <div class="swiper-slide">
+                        <a href=""
+                        class="t">
+                            <em class="f_mf">
+                            </em>
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="swiper-slide">
+                            <span class="orange">
+                                还有精彩章节正在加载中...
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <i>
+            &nbsp;
+        </i>
+    </section>
     <div class="rp_read">
         <section class="rp_head " v-bind:style="bgstyle">
             <span class="rp_pageinfo">
@@ -34,7 +72,7 @@
         <input type="hidden" id="preChaterUrl" value="/r/l/r.jsp?ln=127_478256_97694945_8_L2L7&amp;at=1&amp;nid=590001212&amp;purl=%2Fr%2Fl%2Fr.jsp%3Fat%3D1%26nid%3D590001212%26bid%3D460085325%26readmode%3D2%26cid%3D460085328&amp;bid=460085325&amp;vt=3&amp;cid=460085327&amp;readmode=2">
         <input type="hidden" id="nChapterUrl" value="/r/l/r.jsp?ln=127_478256_97694945_8_L2L7&amp;at=1&amp;nid=590001212&amp;purl=%2Fr%2Fl%2Fr.jsp%3Fat%3D1%26nid%3D590001212%26bid%3D460085325%26readmode%3D2%26cid%3D460085328&amp;bid=460085325&amp;vt=3&amp;cid=460085329&amp;readmode=2&amp;bid=460085325&amp;vt=3">
         <input type="hidden" id="nextPageUrl" value="/r/l/r.jsp?ln=127_478256_97694945_8_L2L7&amp;at=1&amp;nid=590001212&amp;purl=%2Fr%2Fl%2Fr.jsp%3Fat%3D1%26nid%3D590001212%26bid%3D460085325%26readmode%3D2%26cid%3D460085328&amp;bid=460085325&amp;vt=3&amp;cid=460085329&amp;readmode=2&amp;bid=460085325&amp;vt=3">
-        <a href="javascript:void(0)" class="rp_mulu dragBar">
+        <a @click="getChapter()" class="rp_mulu dragBar">
             <span class="img">
             </span>
             目录
@@ -93,6 +131,9 @@ import vueLoading from 'vue-loading-template'
         taptitle:'',
         isShowLoading:false,
         bgstyle:'background: #f7efe6;color: #3a3d3a',
+        ischapt:false,
+        chaptstyle:'width: 360px; height: 588px; transition: transform 400ms ease; transform: translate3d(0px, 0px, 0px);'，
+        chaptlist:[]
       }
     },
     created () {
@@ -107,6 +148,22 @@ import vueLoading from 'vue-loading-template'
     methods: {
       getback () {
         this.$router.go(-1)
+      },
+      getChapter () {//获取章节
+      this.isShowLoading = true;
+        this.$http.post(this.url+'index.php/api/pbook/getBookChapter', { cid: this.cid}).then(function (res) {
+            this.isShowLoading = false;
+             var json = res.body.data
+             this.chaptlist = json;console(this.chaptlist);
+             if (this.ischapt == false) {
+                this.transUtil(".rp_sidebar", 400, 0, 0);
+                $(".rp_s_back").fadeOut(400);
+                this.chaptstyle = 'box-flex: 1;background: rgba(247,239,230,1);height: 100%;padding: 18px 17px 10px;box-shadow: 2px 0 5px rgba(0,0,0,.25);z-index: 201;box-sizing: border-box;overflow: hidden;'
+                this.ischapt = true;
+            }
+          }, function (res) {
+            alert(res.status)
+          })
       },
       setting (val, label) {
         //控制字体从参数
@@ -240,6 +297,18 @@ import vueLoading from 'vue-loading-template'
         }
         
       },
+      transUtil(slt, duration, lenX, lenY) { //移动效果
+        $(slt).css("-webkit-transition", "-webkit-transform " + duration + "ms ease");
+        $(slt).css("-o-transition", "-o-transform " + duration + "ms ease");
+        $(slt).css("-moz-transition", "-moz-transform " + duration + "ms ease");
+        $(slt).css("-ms-transition", "-ms-transform " + duration + "ms ease");
+        $(slt).css("transition", "transform " + duration + "ms ease");
+        $(slt).css("-webkit-transform", "translate3d(" + lenX + "px, " + lenY + "px,0px)");
+        $(slt).css("-moz-transform", "translate3d(" + lenX + "px, " + lenY + "px,0px)");
+        $(slt).css("-o-transform", "translate3d(" + lenX + "px, " + lenY + "px,0px)");
+        $(slt).css("-ms-transform", "translate3d(" + lenX + "px, " + lenY + "px,0px)");
+        $(slt).css("transform", "translate3d(" + lenX + "px, " + lenY + "px,0px)");
+    },
       read (_this){
         var read = {
             sizeNo:'',
@@ -624,15 +693,15 @@ import vueLoading from 'vue-loading-template'
                 });
             },
             daynightChange: function(abc) {
-                $(".rp_link_bthy").tap(function() {console.log(read.isnight);
-                    if (read.isnight == 1) {
+                $(".rp_link_bthy").tap(function() {
+                    if (read.isnight == 0) {
                         _this.bgstyle='background: #181a1d;color: #6d7073';
                         $(".rp_link_bthy").html("<span class='img'></span>白天");
-                        read.isnight = 0;
+                        read.isnight = 1;
                     } else {
                         _this.bgstyle='background: #f7efe6;color: #3a3d3a';
                         $(".rp_link_bthy").html("<span class='img'></span>夜间");
-                        read.isnight = 1;
+                        read.isnight = 0;
                     }
                 });
             },
