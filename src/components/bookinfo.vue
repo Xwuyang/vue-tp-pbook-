@@ -16,10 +16,10 @@
             <input type="hidden" value="1.1" id="slpage">
             <input type="hidden" value="50" id="sunpage">
             <div class="swiper-container">
-                <div v-for="li in chaptlist" class="swiper-wrapper" style="padding-top: 0px; padding-bottom: 0px; transform: translate3d(0px, -51px, 0px); transition-duration: 0s; width: 326px; height: 4081px;">
-                    <div class="swiper-slide">
-                        <a href=""
-                        class="t">
+                <div class="swiper-wrapper" style="padding-top: 0px; padding-bottom: 0px; transform: translate3d(0px, -51px, 0px); transition-duration: 0s; width: 326px; height: 4081px;">
+                    <div v-for="(item,index) in chaptlist" class="swiper-slide swiper-slide-visible" >
+                        <a href="" class="t">
+                            {{item.title}}
                             <em class="f_mf">
                             </em>
                         </a>
@@ -132,8 +132,9 @@ import vueLoading from 'vue-loading-template'
         isShowLoading:false,
         bgstyle:'background: #f7efe6;color: #3a3d3a',
         ischapt:false,
-        chaptstyle:'width: 360px; height: 588px; transition: transform 400ms ease; transform: translate3d(0px, 0px, 0px);'，
-        chaptlist:[]
+        chaptstyle:'width: 360px; height: 588px; transition: transform 400ms ease; transform: translate3d(0px, 0px, 0px);',
+        chaptlist:[],
+        chaptclass:'swiper-slide swiper-slide-visible',
       }
     },
     created () {
@@ -154,7 +155,7 @@ import vueLoading from 'vue-loading-template'
         this.$http.post(this.url+'index.php/api/pbook/getBookChapter', { cid: this.cid}).then(function (res) {
             this.isShowLoading = false;
              var json = res.body.data
-             this.chaptlist = json;console(this.chaptlist);
+             this.chaptlist = json;console.log(this.chaptlist);
              if (this.ischapt == false) {
                 this.transUtil(".rp_sidebar", 400, 0, 0);
                 $(".rp_s_back").fadeOut(400);
