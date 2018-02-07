@@ -18,7 +18,7 @@
             <div class="swiper-container">
                 <div class="swiper-wrapper" style="padding-top: 0px; padding-bottom: 0px; transform: translate3d(0px, -51px, 0px); transition-duration: 0s; width: 326px; height: 4081px;">
                     <div v-for="(item,index) in chaptlist" class="swiper-slide swiper-slide-visible" >
-                        <a href="" class="t">
+                        <a @click="getOtherChapter(item.id)" :class="{'curr':item.id==tap,'t':item.id!=tap}">
                             {{item.title}}
                             <em class="f_mf">
                             </em>
@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div>
-        <i>
+        <i @click="outChapter()">
             &nbsp;
         </i>
     </section>
@@ -135,6 +135,7 @@ import vueLoading from 'vue-loading-template'
         chaptstyle:'width: 360px; height: 588px; transition: transform 400ms ease; transform: translate3d(0px, 0px, 0px);',
         chaptlist:[],
         chaptclass:'swiper-slide swiper-slide-visible',
+        reads: ''
       }
     },
     created () {
@@ -144,27 +145,54 @@ import vueLoading from 'vue-loading-template'
     },
     mounted () {
         this.cid = this.$route.query.bid
-      this.bodys();
+        this.bodys();
     },
     methods: {
       getback () {
         this.$router.go(-1)
       },
+      getOtherChapter (tid)　{
+          var ty = 0;
+          if(tid>=this.tap){
+              ty = 1;
+          }
+          this.tap = tid;
+          this.bodys(ty,this.reads);
+          this.transUtil(".rp_sidebar", 0, 0, 0);
+            $(".rp_s_back").fadeOut(400);
+            this.chaptstyle = 'box-flex: 1;background: rgba(247,239,230,1);height: 100%;padding: 18px 17px 10px;box-shadow: 2px 0 5px rgba(0,0,0,.25);z-index: 201;box-sizing: border-box;overflow: hidden;'
+            this.ischapt = false;
+      },
       getChapter () {//获取章节
-      this.isShowLoading = true;
-        this.$http.post(this.url+'index.php/api/pbook/getBookChapter', { cid: this.cid}).then(function (res) {
-            this.isShowLoading = false;
-             var json = res.body.data
-             this.chaptlist = json;console.log(this.chaptlist);
-             if (this.ischapt == false) {
+        if(!this.chaptlist.length){
+            this.isShowLoading = true;
+            this.$http.post(this.url+'index.php/api/pbook/getBookChapter', { cid: this.cid}).then(function (res) {
+                this.isShowLoading = false;
+                var json = res.body.data
+                this.chaptlist = json;
+                if (this.ischapt == false) {
+                    this.transUtil(".rp_sidebar", 400, 0, 0);
+                    $(".rp_s_back").fadeOut(400);
+                    this.chaptstyle = 'box-flex: 1;background: rgba(247,239,230,1);height: 100%;padding: 18px 17px 10px;box-shadow: 2px 0 5px rgba(0,0,0,.25);z-index: 201;box-sizing: border-box;overflow: hidden;'
+                    this.ischapt = true;
+                }
+            }, function (res) {
+                alert(res.status)
+            })
+        }else{
+            if (this.ischapt == false) {
                 this.transUtil(".rp_sidebar", 400, 0, 0);
                 $(".rp_s_back").fadeOut(400);
                 this.chaptstyle = 'box-flex: 1;background: rgba(247,239,230,1);height: 100%;padding: 18px 17px 10px;box-shadow: 2px 0 5px rgba(0,0,0,.25);z-index: 201;box-sizing: border-box;overflow: hidden;'
                 this.ischapt = true;
             }
-          }, function (res) {
-            alert(res.status)
-          })
+        }
+      },
+      outChapter () {//收缩章节
+        this.transUtil(".rp_sidebar", 0, 0, 0);
+        $(".rp_s_back").fadeOut(400);
+        this.chaptstyle = 'box-flex: 1;background: rgba(247,239,230,1);height: 100%;padding: 18px 17px 10px;box-shadow: 2px 0 5px rgba(0,0,0,.25);z-index: 201;box-sizing: border-box;overflow: hidden;'
+        this.ischapt = false;
       },
       setting (val, label) {
         //控制字体从参数
@@ -243,8 +271,8 @@ import vueLoading from 'vue-loading-template'
                 this.nextsta = res.body.nextsta
                 setTimeout(function(){
                 _read.totalPage2();
-            _read.page = _read.totalPage;
-             _read.totalPage2();
+                _read.page = _read.totalPage;
+                _read.totalPage2();
                     },0);
               }else{
                 this.detail = json[0]['book_detail']
@@ -786,6 +814,7 @@ import vueLoading from 'vue-loading-template'
             }
         }
         read.readInit();
+        _this.reads = read;
       }
     }
   }
