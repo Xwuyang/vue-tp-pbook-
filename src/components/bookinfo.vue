@@ -58,7 +58,6 @@
         <a class="rp_link_back" @click="getback()">
             <i class="icon iconfont icon-iconfanhui" ></i>
         </a>
-        <!-- <a href="javascript:;" class="bname">低调术士</a> -->
         <a href="" title="" class="bookDetail">
         </a>
         <a href="javascript:void(0)" class="rp_link_more">
@@ -157,11 +156,12 @@ import vueLoading from 'vue-loading-template'
               ty = 1;
           }
           this.tap = tid;
-          this.bodys(ty,this.reads);
+          this.bodys(ty,this.reads,1);
           this.transUtil(".rp_sidebar", 0, 0, 0);
             $(".rp_s_back").fadeOut(400);
             this.chaptstyle = 'box-flex: 1;background: rgba(247,239,230,1);height: 100%;padding: 18px 17px 10px;box-shadow: 2px 0 5px rgba(0,0,0,.25);z-index: 201;box-sizing: border-box;overflow: hidden;'
             this.ischapt = false;
+            this.setNewTap ()
       },
       getChapter () {//获取章节
         if(!this.chaptlist.length){
@@ -253,10 +253,10 @@ import vueLoading from 'vue-loading-template'
           this.bodys(ty,_read);
         }
       },
-      bodys (ty,_read) {
+      bodys (ty,_read,isnow) {
           this.isShowLoading = true;
         if(this.tap){
-          this.$http.post(this.url+'index.php/api/pbook/getNextBookInfo', { cid: this.cid, tap:this.tap ,type:ty}).then(function (res) {
+          this.$http.post(this.url+'index.php/api/pbook/getNextBookInfo', { cid: this.cid, tap:this.tap ,type:ty,isnow:isnow}).then(function (res) {
               this.isShowLoading = false;
             var json = res.body.data
             if(json.length){
@@ -429,7 +429,6 @@ import vueLoading from 'vue-loading-template'
                     readList.addEventListener('touchstart',
                         function(e) {
                             e.stopPropagation();
-
                             startX = endX = e.touches[0].pageX;
                             startY = endY = e.touches[0].pageY;
                             lockDirection = ''
@@ -437,7 +436,7 @@ import vueLoading from 'vue-loading-template'
                         false);
                     readList.addEventListener('touchmove',
                         function(e) {
-                            this.c = 0;
+                            read.c = 0;
                             e.stopPropagation();
                             if (!lockDirection || lockDirection === 'x') endX = e.changedTouches[0].pageX;
                             if (!lockDirection || lockDirection === 'y') endY = e.changedTouches[0].pageY;
@@ -451,24 +450,24 @@ import vueLoading from 'vue-loading-template'
                                 read.transUtil2(".rp_sidebar", 400, 0, 0);
                                 read.transUtil2(".rp_tool_bottom", 400, 0, 0);
                                 if (startX > endX) {
-                                    if (this.page < this.totalPage) {
+                                    if (read.page < read.totalPage) {
                                         if (startX - endX > 0) {
-                                            if (this.r == 0) {
+                                            if (read.r == 0) {
                                                 read.transUtil(".rp_cover", 0, -(startX - endX), 0);
                                             } else {
-                                                read.transUtil(".read_text", 0, -((this.page - 1) * this.winWidth) - (startX - endX), 0);
+                                                read.transUtil(".read_text", 0, -((read.page - 1) * read.winWidth) - (startX - endX), 0);
                                             }
                                         }
                                     }
                                 } else if (endX > startX) {
-                                    if (this.r == 1) {
-                                        if (this.page > 1) {
+                                    if (read.r == 1) {
+                                        if (read.page > 1) {
                                             if (endX - startX > 0) {
-                                                read.transUtil(".read_text", 0, -((this.page - 1) * this.winWidth) - (startX - endX), 0);
+                                                read.transUtil(".read_text", 0, -((read.page - 1) * read.winWidth) - (startX - endX), 0);
                                             }
                                         } else {
                                             if (endX - startX > 0) {
-                                                read.transUtil(".rp_cover", 0, -(this.winWidth) - (startX - endX), 0);
+                                                read.transUtil(".rp_cover", 0, -(read.winWidth) - (startX - endX), 0);
 
                                             }
                                         }
@@ -487,41 +486,42 @@ import vueLoading from 'vue-loading-template'
                                 if (startX > endX) {
                                     if (startX - endX > 50) {
                                         if ($(".rp_cover").size() == 0) {
-                                            this.r = 1;
+                                            read.r = 1;
                                         }
-                                        if (this.r == 0) {
+                                        if (read.r == 0) {
                                             read.transUtil(".rp_cover", 400, -$(window).width(), 0);
-                                            this.r = 1;
+                                            read.r = 1;
                                         } else {
-                                            this.page++;
+                                            read.page++;
                                             read.touchRight();
-                                            (this.page > this.totalPage) ? this.page = this.totalPage : this.page = this.page;
-                                            $(".rp_pageinfo").html(this.page + "/" + this.totalPage);
+                                            (read.page > read.totalPage) ? read.page = read.totalPage : read.page = read.page;
+                                            $(".rp_pageinfo").html(read.page + "/" + read.totalPage);
                                         }
                                     } else {
-                                        if (this.r == 0) {
+                                        if (read.r == 0) {
                                             read.transUtil(".rp_cover", 400, 0, 0);
                                         } else {
-                                            read.transUtil(".read_text", 400, -((this.page - 1) * this.winWidth), 0);
+                                            read.transUtil(".read_text", 400, -((read.page - 1) * read.winWidth), 0);
                                         }
                                     }
                                 } else {
-                                    if (this.page > 1) {
+                                    if (read.page > 1) {
                                         if (endX - startX > 50) {
-                                            (this.page < 1) ? this.page = 1 : this.page = this.page;
-                                            this.page--;
+                                            (read.page < 1) ? read.page = 1 : read.page = read.page;
+                                            read.page--;
                                             read.touchLeft();
-                                            $(".rp_pageinfo").html(this.page + "/" + this.totalPage)
+                                            $(".rp_pageinfo").html(read.page + "/" + read.totalPage)
                                         } else {
-                                            read.transUtil(".read_text", 400, -((this.page - 1) * this.winWidth), 0)
+                                            read.transUtil(".read_text", 400, -((read.page - 1) * read.winWidth), 0)
                                         }
                                     } else {
                                         if (endX - startX > 50) {
-                                            read.transUtil(".rp_cover", 400, 0, 0);
-                                            this.r = 0;
+                                            read.page--;
+                                            read.touchLeft();
+                                            read.transUtil(".rp_cover", 0, 0, 0);
                                         } else {
                                             read.transUtil(".rp_cover", 400, -$(window).width(), 0);
-                                            this.r = 1;
+                                            read.r = 1;
                                         }
                                     }
                                 }
@@ -594,6 +594,20 @@ import vueLoading from 'vue-loading-template'
                     $(".rp_dsyp").hide();
                 }
                 read.totalPage2();
+                // $(".rp_tool_more,.rp_shadow,.rp_tool_bg,.rp_tool_other").fadeOut(300);
+                // read.transUtil(".rp_tool_top", 400, 0, 0);
+                // read.transUtil(".rp_sidebar", 400, 0, 0);
+                // read.transUtil(".rp_tool_bottom", 400, 0, 0);
+                // this.c = 0;
+                // if (this.r == 1) {
+                //     this.page--;
+                //     read.touchLeft();
+                //     (this.page < 1) ? this.page = 1 : this.page = this.page;
+                //     $(".rp_pageinfo").html(this.page + "/" + this.totalPage);
+                //     this.p = this.page / this.totalPage;
+                // } else {
+                //     read.preChapter();
+                // }
             },
             moveLeft: function() {
                 $(".rp_tool_more,.rp_shadow,.rp_tool_bg,.rp_tool_other").fadeOut(300);
@@ -682,7 +696,6 @@ import vueLoading from 'vue-loading-template'
                             "font-size": this.sizeInfo[this.sizeNo].size + "px",
                             "line-height": this.sizeInfo[this.sizeNo].lineHeight + "px"
                         });
-                        console.log(this.sizeNo);
                         addCookie("sizeNo", this.sizeNo, 30 * 24);
                         read.totalPage2();
                     };
@@ -706,7 +719,6 @@ import vueLoading from 'vue-loading-template'
                             "font-size": this.sizeInfo[this.sizeNo].size + "px",
                             "line-height": this.sizeInfo[this.sizeNo].lineHeight + "px"
                         });
-                        console.log(this.sizeNo);
                         addCookie("sizeNo", this.sizeNo, 30 * 24);
                         read.totalPage2();
                     };

@@ -1,2 +1,2 @@
-const url = 'apis/';
+const url = '/';
 export  {url};
