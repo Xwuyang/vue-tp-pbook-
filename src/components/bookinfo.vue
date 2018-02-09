@@ -73,16 +73,19 @@
         <input type="hidden" id="nextPageUrl" value="/r/l/r.jsp?ln=127_478256_97694945_8_L2L7&amp;at=1&amp;nid=590001212&amp;purl=%2Fr%2Fl%2Fr.jsp%3Fat%3D1%26nid%3D590001212%26bid%3D460085325%26readmode%3D2%26cid%3D460085328&amp;bid=460085325&amp;vt=3&amp;cid=460085329&amp;readmode=2&amp;bid=460085325&amp;vt=3">
         <a @click="getChapter()" class="rp_mulu dragBar">
             <span class="img">
+                 <i class="icon iconfont icon-mulu" ></i>
             </span>
             目录
         </a>
         <a href="javascript:void(0)" class="rp_link_bthy ">
             <span class="img">
+                <i class="icon iconfont" :class="dayormun"></i>
             </span>
-            夜间
+            {{dayormunname}}
         </a>
         <a href="javascript:void(0)" class="rp_link_bg">
             <span class="img">
+                <i class="icon iconfont icon-shezhi"></i>
             </span>
             设置
         </a>
@@ -134,7 +137,9 @@ import vueLoading from 'vue-loading-template'
         chaptstyle:'width: 360px; height: 588px; transition: transform 400ms ease; transform: translate3d(0px, 0px, 0px);',
         chaptlist:[],
         chaptclass:'swiper-slide swiper-slide-visible',
-        reads: ''
+        reads: '',
+        dayormun: 'icon-moonyueliang',
+        dayormunname: '夜晚'
       }
     },
     created () {
@@ -737,11 +742,13 @@ import vueLoading from 'vue-loading-template'
                 $(".rp_link_bthy").tap(function() {
                     if (read.isnight == 0) {
                         _this.bgstyle='background: #181a1d;color: #6d7073';
-                        $(".rp_link_bthy").html("<span class='img'></span>白天");
+                        _this.dayormun = 'icon-taiyang-copy';
+                        _this.dayormunname = '白天';
                         read.isnight = 1;
                     } else {
                         _this.bgstyle='background: #f7efe6;color: #3a3d3a';
-                        $(".rp_link_bthy").html("<span class='img'></span>夜间");
+                        _this.dayormun = 'icon-moonyueliang';
+                        _this.dayormunname = '夜晚';
                         read.isnight = 0;
                     }
                 });
@@ -845,5 +852,9 @@ import vueLoading from 'vue-loading-template'
     float: left;
     line-height: 50px;
     margin-left: 0.5rem;
+}
+.rp_tool_bottom i{
+    font-size: 20px;
+    line-height: 28px;
 }
 </style>

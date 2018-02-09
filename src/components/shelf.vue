@@ -93,24 +93,25 @@
     height: 2.5rem;
     background-color: darkred;
     z-index: 10000;
+    height: 3rem;
   }
   .header span{
     float: left;
     display: block;
     color: #ffffff;
     font-size: 1rem;
-    line-height: 2.5rem;
+    line-height: 3rem;
     margin-left: 1rem;
   }
   .header .icon{
     color: #ffffff;
     font-size: 1rem;
     float: right;
-    line-height: 2.5rem;
+    line-height: 3rem;
     margin-right: 1rem;
   }
   .box{
-    margin-top: 2.5rem;
+    margin-top: 3rem;
     margin-bottom: 2.25rem;
   }
   .pbbood{
@@ -119,7 +120,7 @@
   }
   .pbbood img{
     width: 13%;
-    height:80%;
+    height:90%;
     float: left;
     padding: 0.25rem;
     line-height: 3.5rem;

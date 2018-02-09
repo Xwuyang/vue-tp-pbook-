@@ -107,12 +107,13 @@ import vueLoading from 'vue-loading-template'
     height: 2.5rem;
     background-color: darkred;
     z-index: 10000;
+    height: 3rem;
   }
   .header .icon{
     color: #ffffff;
     font-size: 1rem;
     float: right;
-    line-height: 2.5rem;
+    line-height: 3rem;
     margin-right: 1rem;
   }
   .search-div{
@@ -128,7 +129,7 @@ import vueLoading from 'vue-loading-template'
     padding-top: 0.3rem;
     padding-left: 5%;
     display: block;
-    height: 2rem;
+    height: 2.4rem;
     color: #fff;
     width: 95%;
     border-bottom: 1px solid darkred;

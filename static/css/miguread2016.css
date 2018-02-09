@@ -1,5 +1,5 @@
 *{-webkit-tap-highlight-color:transparent;}  
-body{ min-width:320px;font-family:"\5FAE\8F6F\96C5\9ED1", Helvetica;font-size:13px; -webkit-text-size-adjust: none;-webkit-user-select: none; line-height:150%;background:#f7efe6;color:#3a3d3a;}
+body{ min-width:320px;font-family:"\5FAE\8F6F\96C5\9ED1", Helvetica;font-size:13px; -webkit-text-size-adjust: none;-webkit-user-select: none; line-height:150%;color:#3a3d3a;}
 body,h1,h2,h3,h4,h5,h6,hr,p,blockquote,dl,dt,dd,ul,ol,li,pre,form,fieldset,legend,button,input,textarea,th,td{margin:0;padding:0}
 ul,ol{list-style:none}
 a,a:visited,a:hover{text-decoration:none;color: #333;}
